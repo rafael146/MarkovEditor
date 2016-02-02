@@ -83,7 +83,6 @@ public class MarkovApplication extends AbstractApplication {
 
 	    private Preferences prefs;
 
-	    /** Creates a new instance. */
 	    @Override
 		protected void initLabels() {
 			labels=ResourceBundleUtil.getBundle("main.Labels");
@@ -258,9 +257,7 @@ public class MarkovApplication extends AbstractApplication {
 	        }
 	    }
 
-	    /**
-	     * Creates a menu bar.
-	     */
+	   
 	    protected JMenuBar createMenuBar(View v) {
 	        JMenuBar mb = new JMenuBar();
 
@@ -405,14 +402,6 @@ public class MarkovApplication extends AbstractApplication {
 	    }
 	    
 	   
-	   
-
-	    /**
-	     * Updates the title of a view and displays it in the given frame.
-	     * 
-	     * @param view The view.
-	     * @param f The frame.
-	     */
 	    protected void updateViewTitle(View view, JFrame f) {
 	        URI uri = view.getURI();
 	        String title;
@@ -454,12 +443,7 @@ public class MarkovApplication extends AbstractApplication {
 	   
 
 
-	    /**
-	     * Creates the view menu.
-	     * 
-	     * @param view The View
-	     * @return A JMenu or null, if the menu doesn't have any items.
-	     */
+	   
 	    @SuppressWarnings("unchecked")
 	    @Override
 	    public JMenu createViewMenu(final View view) {

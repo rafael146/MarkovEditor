@@ -60,7 +60,7 @@ public class Transicao extends LabeledLineConnectionFigure {
     private int grupo;
     private double peso;
     private String Label;
-    /** Creates a new instance. */
+    
     public Transicao() {
         set(STROKE_COLOR, new Color(0xFF0000));
         set(STROKE_WIDTH, 1d);
@@ -81,10 +81,7 @@ public class Transicao extends LabeledLineConnectionFigure {
         
     }
 
-    /**
-     * Checks if two figures can be connected. Implement this method
-     * to constrain the allowed connections between figures.
-     */
+   
     @Override
     public boolean canConnect(Connector start, Connector end) {
     	
@@ -94,9 +91,6 @@ public class Transicao extends LabeledLineConnectionFigure {
             Estado sf = (Estado) start.getOwner();
             Estado ef = (Estado) end.getOwner();
             this.setGrupo(sf.getGrupoAtual());
-           
-
-            // Disallow multiple connections to same dependent
           
 				if (sf.getSuccessors().contains(ef) || sf.getPesoGrupo()>=1) {
 					
@@ -119,10 +113,7 @@ public class Transicao extends LabeledLineConnectionFigure {
     	
     }
 
-    /**
-     * Handles the disconnection of a connection.
-     * Override this method to handle this event.
-     */
+  
     @Override
     protected void handleDisconnect(Connector start, Connector end) {
         Estado sf = (Estado) start.getOwner();
@@ -130,10 +121,7 @@ public class Transicao extends LabeledLineConnectionFigure {
        
     }
 
-    /**
-     * Handles the connection of a connection.
-     * Override this method to handle this event.
-     */
+    
     @Override
     protected void handleConnect(Connector start, Connector end) {
         Estado sf = (Estado) start.getOwner();
@@ -291,7 +279,5 @@ public class Transicao extends LabeledLineConnectionFigure {
         
 	
 	}
-//	[] s=0 -> 1.0 : (s'=1);
-//	[] s=0 -> 0.7 : (s'=0
-//
+
 }

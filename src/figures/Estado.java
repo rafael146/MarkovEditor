@@ -61,10 +61,7 @@ public class Estado extends GraphicalCompositeFigure {
     private String rotulo;
     private TextFigure tx; 
     private Boolean open=false;
-    /**
-     * This adapter is used, to connect a TextFigure with the name of
-     * the Estado model.
-     */
+ 
     private static class NameAdapter extends FigureAdapter {
 
         private Estado target;
@@ -76,7 +73,6 @@ public class Estado extends GraphicalCompositeFigure {
         }
     }
 
-    /** Creates a new instance. */
     public Estado() {
     	
     	idState++;
@@ -295,10 +291,7 @@ public class Estado extends GraphicalCompositeFigure {
         return list;
     }
     
-    /**
-     * Retorna as transições do grupo do estado atual 
-     * @return list
-     */
+   
     public List<Transicao> getTransicaoEstadoAtual(){
     	ArrayList<Transicao> list=new ArrayList<Transicao>();
     	for (Transicao t : getDependencies()) {

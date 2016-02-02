@@ -48,7 +48,6 @@ public class MarkovFactory extends DefaultDOMFactory {
         { ArrowTip.class, "arrowTip" }
     };
     
-    /** Creates a new instance. */
     public MarkovFactory() {
         for (Object[] o : classTagArray) {
             addStorableClass((String) o[1], (Class) o[0]);

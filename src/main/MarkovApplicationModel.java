@@ -86,9 +86,7 @@ public class MarkovApplicationModel extends DefaultApplicationModel {
             }
         }
     }
-    /**
-     * This editor is shared by all views.
-     */
+   
     private DefaultDrawingEditor sharedEditor;
     /** Creates a new instance. */
     public MarkovApplicationModel() {
@@ -174,11 +172,7 @@ public class MarkovApplicationModel extends DefaultApplicationModel {
         return a;
     }
 
-    /**
-     * Creates toolbars for the application.
-     * This class always returns an empty list. Subclasses may return other
-     * values.
-     */
+   
     @Override
     public java.util.List<JToolBar> createToolBars(Application a, @Nullable View pr) {
         ResourceBundleUtil drawLabels = ResourceBundleUtil.getBundle("main.Labels");
