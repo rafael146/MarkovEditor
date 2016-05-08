@@ -39,6 +39,7 @@ public class App {
         
         
         DefaultApplicationModel model = new MarkovApplicationModel();
+        model.setVersion(App.class.getPackage().getImplementationVersion());
         model.setName("Markov Decision Process");
         model.setViewClassName("main.MarkovView");
         app.setModel(model);

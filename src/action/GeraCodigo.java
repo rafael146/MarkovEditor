@@ -29,11 +29,12 @@ import java.util.Set;
 import javax.swing.Action;
 import javax.swing.JFileChooser;
 
+import main.MarkovView;
+
 import org.jhotdraw.app.Application;
 import org.jhotdraw.app.View;
 import org.jhotdraw.app.action.AbstractViewAction;
 import org.jhotdraw.app.action.edit.SelectAllAction;
-import org.jhotdraw.app.action.file.SaveFileAction;
 import org.jhotdraw.draw.DrawingEditor;
 import org.jhotdraw.draw.DrawingView;
 import org.jhotdraw.draw.Figure;
@@ -47,12 +48,8 @@ import org.jhotdraw.util.ResourceBundleUtil;
 
 import core.ArquivoPRISM;
 import core.Gerador;
-import figures.Estado;
-import main.MarkovView;
-
-
-
 import edu.umd.cs.findbugs.annotations.Nullable;
+import figures.Estado;
 
 public class GeraCodigo extends AbstractViewAction{
 	
@@ -61,7 +58,7 @@ public class GeraCodigo extends AbstractViewAction{
 	 */
 	private static final long serialVersionUID = 1L;
 	public static final String ID = "gera.codigo";
-	private String diretorio="";
+	
 	private ResourceBundleUtil labels = ResourceBundleUtil.getBundle("main.Labels");
 	public GeraCodigo(Application app, @Nullable View view){
 		super(app, view);
@@ -103,12 +100,10 @@ public class GeraCodigo extends AbstractViewAction{
 					}
 					
 			}
-//			SaveFileAction save = new SaveFileAction(getApplication(), getApplication().getActiveView());
-//			save.actionPerformed(e);
 			
-			//this.getDirectory();
-			Gerador gerador = new Gerador(new ArquivoPRISM(), estados, "diretorio");
-			gerador.gerar();
+			Salvar(estados);
+			
+			
 			this.setEnabled(true);
 	    }
 	    
@@ -121,15 +116,21 @@ public class GeraCodigo extends AbstractViewAction{
 	                );
 	    }
 	    protected URIChooser getChooser(View view) {
-	        URIChooser chsr = (URIChooser) (view.getComponent()).getClientProperty("saveChooser");
+	    	JFileURIChooser c = new JFileURIChooser();
+	        c.addChoosableFileFilter(new ExtensionFileFilter("PRISM Source", "nm"));
+	       URIChooser a=(URIChooser) c.getComponent();
+
+	        URIChooser chsr = a;// (URIChooser) (view.getComponent()).getClientProperty("saveChooser");
 	        if (chsr == null) {
 	            chsr = getApplication().getModel().createSaveChooser(getApplication(), view);
 	            view.getComponent().putClientProperty("saveChooser", chsr);
 	        }
 	        return chsr;
 	    }
-	    protected void getDirectory(){
+	    protected void Salvar(ArrayList<Estado> estados){
+	    	
 	    	final View view = getActiveView();
+	    	 
 			
 		    if (view.isEnabled()) {
 		        view.setEnabled(false);
@@ -138,26 +139,37 @@ public class GeraCodigo extends AbstractViewAction{
 		        JSheet.showSaveSheet(fileChooser, view.getComponent(), new SheetListener() {
 		        	@Override
 		            public void optionSelected(final SheetEvent evt) {
+		        		
 		        		if (evt.getOption() == JFileChooser.APPROVE_OPTION) {
+		        			
 		        			final URI uri;
+		        			
 		                    	if ((evt.getChooser() instanceof JFileURIChooser) && (evt.getFileChooser().getFileFilter() instanceof ExtensionFileFilter)) {
 		                    		uri = ((ExtensionFileFilter) evt.getFileChooser().getFileFilter()).makeAcceptable(evt.getFileChooser().getSelectedFile()).toURI();
-		                        } else {
+		                    		
+		                    	} else {
 		                        	uri = evt.getChooser().getSelectedURI();
+		                        	
 		                        }
-		                        setDiretorio(uri.getPath());
-		        			}
+		                    	
+		                    	Gerador gerador = new Gerador(new ArquivoPRISM(), estados);
+		            			gerador.gerar();
+		            			
+		            			String module= evt.getFileChooser().getSelectedFile().getName();
+		            			String path = uri.getPath();
+		            			gerador.salvarCod(module, path);
+		                    	
 		                }
-		            });
+		            }
+		        	 
+		        });
+		        
 		        }
+			view.setEnabled(true);
 			
 		}
-	    private void setDiretorio(String d){
-	    	diretorio=d;
-	    }
-	    private String getDiretorio(){
-	    	return diretorio;
-	    }
+	    
 }
+
 
 

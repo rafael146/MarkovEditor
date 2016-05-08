@@ -20,35 +20,27 @@ This file is part of MarkovEditor.
 */
 
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-import org.jhotdraw.draw.Figure;
-
 
 import figures.Estado;
 import figures.Transicao;;
 
 
 public class ArquivoPRISM implements Arquivo {
+	
+	
 
 	@Override
-	public void cabecalho(String begin) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void gerarCodigo(List<Estado> estados) {
-		String cod = "";
+	public String gerarCodigo(List<Estado> estados) {
+		String cod = "\n	s : [0.."+(estados.size() - 1) +"] intit 0 \n\n";
 		for (Estado estado : estados) {
 			for(int i=0; i < estado.getQuantidadeGrupos(); i++) {
 				Set<Transicao> transicoes = estado.getTransicoesPorGrupo(i);
 				
 				if(transicoes == null || transicoes.size()==0) continue;
 				int quantidadeTransicoes = transicoes.size();
-				cod += "[] s=" + estado.getId() + " -> ";
+				cod += "	[] s=" + estado.getId() + " -> ";
 				
 				int add = 0;
 				for(Transicao transicao : estado.getTransicoesPorGrupo(i)) {
@@ -61,7 +53,8 @@ public class ArquivoPRISM implements Arquivo {
 				cod += ";\n";
 			}	
 		}
-		System.out.println(cod);
+		cod+="\nendmodule";
+		return cod;
 	}
 
 }

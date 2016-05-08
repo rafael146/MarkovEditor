@@ -55,13 +55,12 @@ public class Estado extends GraphicalCompositeFigure {
 
     private HashMap<Integer, HashSet<Transicao>> transicoes;
     private ArrayList<Integer> grupos;
-    private static int idState=0;
     private int id=0;
+    private static int idGeral=0;
     private int grupoAtual=0;
     private String rotulo;
     private TextFigure tx; 
-    private Boolean open=false;
- 
+    
     private static class NameAdapter extends FigureAdapter {
 
         private Estado target;
@@ -69,20 +68,22 @@ public class Estado extends GraphicalCompositeFigure {
         @Override
         public void attributeChanged(FigureEvent e) {
            
-            target.firePropertyChange("name", e.getOldValue(), e.getNewValue());
+           // target.firePropertyChange("name", e.getOldValue(), e.getNewValue());
         }
     }
 
     public Estado() {
     	
-    	idState++;
+    	
     	setPresentationFigure(new EllipseFigure(40,40,40,40));
     	setRotulo("s"+id);
     	
     	tx= new TextFigure(rotulo);
     	tx.set(LAYOUT_INSETS,new Insets2D.Double(20,20,20,20));
     	tx.setBounds(new Point2D.Double(10, 10), new Point2D.Double(20, 20));
-    	tx.setEditable(true);
+    	tx.setEditable(false);
+    	setRotulo(rotulo);
+    	tx.setText(getRotulo());
     	add(tx);
     	transicoes = new HashMap<Integer, HashSet<Transicao>>();
     	setLayouter(new VerticalLayouter());
@@ -92,111 +93,79 @@ public class Estado extends GraphicalCompositeFigure {
     	
     	layout();
     }
+    
+    @Override
+    public Estado clone() {
+        Estado that = (Estado) super.clone();
+      
+        int dif=0;
+        that.transicoes = new HashMap<Integer, HashSet<Transicao>>();
+        that.grupos = new ArrayList<Integer>();
+        that.grupos.add(0);
+        
+        dif=id-idGeral;
+        
+        
+        that.id=id++;
+        idGeral++;
+        
+        if (dif==1){
+        	id=idGeral;
+        	System.out.println("dif "+dif);
+        }else if (dif >1) {
+			System.out.println("dif > :"+dif);
+			idGeral+=dif-1;
+			id-=3;
+		}
+        System.out.println("id: "+id+" idgeral: "+idGeral);
+       
+        setRotulo("s"+id);
+        that.setRotulo("s"+(id -1));
+        
+        
+        that.tx.setText(getRotulo());
+       // that.setId(that.id-1);
+
+        
+        return that;
+    }
+    
+    @Override
+	public void removeNotify(Drawing drawing) {
+		// TODO Auto-generated method stub
+		System.out.println("removendo "+this.getId());
+		int dif=0;
+		if(this.getId()==(idGeral)-1){
+			idGeral-=2;
+			clone();
+			//System.out.println("aki");
+		}else if (this.getId()<(idGeral -1)) {
+			System.out.println("");
+			dif= (idGeral) -(this.getId());
+			idGeral=dif+1 -idGeral;
+			clone();
+			//id--;
+			
+			
+			System.out.println(dif );
+			System.out.println(idGeral+ " " +id +" "+dif);
+			
+		}
+		
+		
+		
+		super.removeNotify(drawing);
+		
+	}
+    
     @Override
     public Collection<Handle> createHandles(int detailLevel) {
     	// TODO Auto-generated method stub
     	return super.createHandles(detailLevel);
     }
 
-    public int getGrupoAtual() {
-		return grupoAtual;
-	}
-
-	public void setGrupoAtual(int grupoAtual) {
-		this.grupoAtual = grupoAtual;
-	}
-
-	public TextFigure getTx() {
-		return tx;
-	}
-
-	public void setTx(TextFigure tx) {
-		this.tx = tx;
-	}
-
-	public String getRotulo() {
-		return rotulo;
-	}
 
 	
-	private void setRotulo(String rotulo) {
-		this.rotulo = rotulo;
-		
-	}
-	
-	public ArrayList<Integer> getGrupos() {
-		return grupos;
-	}
-	
-	public int getQuantidadeGrupos() {
-		return grupos.size();
-		
-	}
-
-	public void setGrupos(ArrayList<Integer> grupos) {
-		this.grupos = grupos;
-	}
-	
-	public void addGrupo(int i){
-		grupos.add(i);
-	}
-
-
-	public void removeGrupo(int i){
-		grupos.remove(i);
-	}
-	
-	@Override
-	public void removeNotify(Drawing drawing) {
-		// TODO Auto-generated method stub
-		if (!(idState-id==2)) {
-			//atualizaEstados();
-		}
-		idState-=2;
-		clone();
-		super.removeNotify(drawing);
-		
-	}
-	
-	void atualizaEstados(){
-		List<Figure> figure = getDrawing().getFiguresFrontToBack();
-		
-		Iterator< Figure> itr= figure.iterator();
-		//System.out.println(figure.size());
-		ArrayList<Estado> estados = new ArrayList<Estado>(); 
-		
-		Estado atual=null;
-		while(itr.hasNext()){
-			Figure a =itr.next();
-				if ( a instanceof Estado){
-					atual= (Estado) a;
-					estados.add(atual);
-					System.out.println(atual.toString());
-				}
-				
-		}
-	}
-	
-
-	@Override
-    public Estado clone() {
-        Estado that = (Estado) super.clone();
-        //that.destino = new HashSet<Transicao>();
-        that.transicoes = new HashMap<Integer, HashSet<Transicao>>();
-        that.grupos = new ArrayList<Integer>();
-        that.grupos.add(0);
-        that.id=idState;
-        idState++;
-        setRotulo("s"+(that.id));
-        that.setRotulo("s"+(that.id - 1));
-        that.id--;
-       
-        System.out.println(that.getRotulo()+" "+that.id+" "+idState);
-       
-        that.tx.setText(getRotulo());
-      
-        return that;
-    }
   
     @Override
     public void read(DOMInput in) throws IOException {
@@ -208,12 +177,16 @@ public class Estado extends GraphicalCompositeFigure {
         setBounds(new Point2D.Double(x, y), new Point2D.Double(x + w, y + h));
        // setRotulo(in.getAttribute("rotulo", ""));
         readAttributes(in);
-        in.openElement("rotulo");
+        in.openElement("id");
+        id=((int) in.readObject());
         
+        in.closeElement();
+        in.openElement("rotulo");
         setRotulo((String) in.readObject());
-        setTx(new TextFigure(getRotulo()));
+        tx.setText(getRotulo());
         System.out.println(getRotulo());
         in.closeElement();
+        
         in.openElement("grupos");
         String numGrupo = (String)in.readObject();
         int nun=Integer.parseInt(numGrupo);
@@ -329,6 +302,58 @@ public class Estado extends GraphicalCompositeFigure {
 	public int getId() {
 		return id;
 	}
+	public void setId(int id){
+		this.id=id;
+	}
+	
+    public int getGrupoAtual() {
+		return grupoAtual;
+	}
+
+	public void setGrupoAtual(int grupoAtual) {
+		this.grupoAtual = grupoAtual;
+	}
+
+	public TextFigure getTx() {
+		return tx;
+	}
+
+	public void setTx(TextFigure tx) {
+		this.tx = tx;
+	}
+
+	public String getRotulo() {
+		return rotulo;
+	}
+
+	
+	private void setRotulo(String rotulo) {
+		this.rotulo = rotulo;
+		
+	}
+	
+	public ArrayList<Integer> getGrupos() {
+		return grupos;
+	}
+	
+	public int getQuantidadeGrupos() {
+		return grupos.size();
+		
+	}
+
+	public void setGrupos(ArrayList<Integer> grupos) {
+		this.grupos = grupos;
+	}
+	
+	public void addGrupo(int i){
+		grupos.add(i);
+	}
+
+
+	public void removeGrupo(int i){
+		grupos.remove(i);
+	}
+	
 
 }
 

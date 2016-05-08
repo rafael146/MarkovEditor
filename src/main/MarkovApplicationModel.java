@@ -88,9 +88,11 @@ public class MarkovApplicationModel extends DefaultApplicationModel {
     }
    
     private DefaultDrawingEditor sharedEditor;
+
+    private HashMap<String, Action> actions;
     /** Creates a new instance. */
     public MarkovApplicationModel() {
-    	getSharedEditor();
+    	//getSharedEditor();
     }
 
     @Override
@@ -220,6 +222,8 @@ public class MarkovApplicationModel extends DefaultApplicationModel {
     public URIChooser createSaveChooser(Application a, @Nullable View v) {
         JFileURIChooser c = new JFileURIChooser();
         c.addChoosableFileFilter(new ExtensionFileFilter("PDM Diagram", "xml"));
+
+        
         return c;
     }
     @Override

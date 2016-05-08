@@ -20,6 +20,9 @@ This file is part of MarkovEditor.
 */
 
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -32,23 +35,19 @@ public class Gerador implements Serializable{
 	private static final long serialVersionUID = 1503994813479163807L;
 	private ArrayList<Estado> transicoes;
 	private Arquivo arquivoGerado;
-	private String diretorio;
+	private String cod="";
 	
-	public Gerador(Arquivo arquivo, ArrayList<Estado> t, String d){
+	public Gerador(Arquivo arquivo, ArrayList<Estado> t){
 		this.arquivoGerado = arquivo;
 		this.setTransicoes(t);
-		this.setDiretorio(d);
 		
 	}
 	
 	public void gerar() {
-		arquivoGerado.gerarCodigo(transicoes);
+		setCod(arquivoGerado.gerarCodigo(transicoes));
 	}
 
-	private void setDiretorio(String d) {
-		// TODO Auto-generated method stub
-		this.diretorio=d;
-	}
+	
 
 	public ArrayList<Estado> getTransicoes() {
 		return transicoes;
@@ -65,4 +64,42 @@ public class Gerador implements Serializable{
 	public void setArquivoGerado(Arquivo arquivoGerado) {
 		this.arquivoGerado = arquivoGerado;
 	}
+
+	public String getCod() {
+		return cod;
+	}
+
+	public void setCod(String cod) {
+		this.cod = cod;
+	}
+	
+	public boolean salvarCod(String nameModule, String diretorio){
+		 BufferedWriter writer = null;
+		 String cabecalho= cabecalho(nameModule);
+         
+         try
+         {
+             writer = new BufferedWriter( new FileWriter(diretorio));
+             writer.write(cabecalho);
+             writer.write( this.cod);
+             writer.close();
+
+         }
+         catch ( IOException e)
+         {
+       	  e.printStackTrace();
+		}
+		return false;
+		
+	}
+	
+	private String cabecalho(String modulo){
+		String cabecalho="";
+		if(arquivoGerado instanceof ArquivoPRISM){
+			 cabecalho = "mdp \n\nmodule "+ modulo +" : \n";
+		}
+		return cabecalho;
+		
+	}
+	
 }
