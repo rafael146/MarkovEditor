@@ -132,7 +132,7 @@ public class Transicao extends LabeledLineConnectionFigure {
        
         sf.addDependency(this); 
         try {
-        	System.out.println(getPeso());
+        	System.out.println(getPeso()+"aki");
         	if(getPeso()==0){
         		taxa=Double.parseDouble(JOptionPane.showInputDialog("Probabilidade da transição: "));
         		sf.isAddPesoGrupo(taxa);
@@ -154,7 +154,7 @@ public class Transicao extends LabeledLineConnectionFigure {
 		}
 
         Label= criaLabel(sf.getRotulo());
-        System.out.println(sf.getRotulo());
+       
         TextFigure t = new TextFigure(Label);
         t.setEditable(false);
         t.set(LocatorLayouter.LAYOUT_LOCATOR, new BezierLabelLocator(0.8,  Math.PI + Math.PI /  4, 0));

@@ -24,16 +24,6 @@ public class App {
     
     public static void main(String[] args) {
         Application app = null;
-//        String os = System.getProperty("os.name").toLowerCase();
-//        if (os.startsWith("mac")) {
-//        //    app = new OSXApplication();
-//        } else if (os.startsWith("win")) {
-//          //  app = new DefaultMDIApplication();
-//          //  app = new SDIApplication();
-//        } else {
-//            app = new MarkovApplication();
-//         //   app = new SDIApplication();
-//        }
         app = new MarkovApplication();
         
         

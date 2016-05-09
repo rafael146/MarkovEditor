@@ -33,7 +33,7 @@ public class ArquivoPRISM implements Arquivo {
 
 	@Override
 	public String gerarCodigo(List<Estado> estados) {
-		String cod = "\n	s : [0.."+(estados.size() - 1) +"] intit 0 \n\n";
+		String cod = "\n	s : [0.."+(estados.size() - 1) +"] init 0 \n\n";
 		for (Estado estado : estados) {
 			for(int i=0; i < estado.getQuantidadeGrupos(); i++) {
 				Set<Transicao> transicoes = estado.getTransicoesPorGrupo(i);

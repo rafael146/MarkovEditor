@@ -28,6 +28,7 @@ import java.util.Set;
 
 import javax.swing.Action;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import main.MarkovView;
 
@@ -100,9 +101,11 @@ public class GeraCodigo extends AbstractViewAction{
 					}
 					
 			}
-			
-			Salvar(estados);
-			
+			if(estados.size()!=0){
+				Salvar(estados);
+			}else {
+				JOptionPane.showMessageDialog(null,"Modelo vazio.\nInsira estados e Transições");
+			}
 			
 			this.setEnabled(true);
 	    }
@@ -154,10 +157,11 @@ public class GeraCodigo extends AbstractViewAction{
 		                    	
 		                    	Gerador gerador = new Gerador(new ArquivoPRISM(), estados);
 		            			gerador.gerar();
-		            			
 		            			String module= evt.getFileChooser().getSelectedFile().getName();
-		            			String path = uri.getPath();
-		            			gerador.salvarCod(module, path);
+			            		String path = uri.getPath();
+			            		System.out.println(gerador.getCod());
+			            		gerador.salvarCod(module, path);
+			            				
 		                    	
 		                }
 		            }

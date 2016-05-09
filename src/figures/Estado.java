@@ -56,7 +56,7 @@ public class Estado extends GraphicalCompositeFigure {
     private HashMap<Integer, HashSet<Transicao>> transicoes;
     private ArrayList<Integer> grupos;
     private int id=0;
-    private static int idGeral=0;
+    private static int idGeral=-1;
     private int grupoAtual=0;
     private String rotulo;
     private TextFigure tx; 
@@ -75,85 +75,52 @@ public class Estado extends GraphicalCompositeFigure {
     public Estado() {
     	
     	
-    	setPresentationFigure(new EllipseFigure(40,40,40,40));
-    	setRotulo("s"+id);
+    	this.setPresentationFigure(new EllipseFigure(40,40,40,40));
+    	this.setRotulo("s"+idGeral);
+    	this.setId(idGeral);
+    	this.tx= new TextFigure(rotulo);
+    	this.tx.set(LAYOUT_INSETS,new Insets2D.Double(20,20,20,20));
+    	this.tx.setBounds(new Point2D.Double(10, 10), new Point2D.Double(20, 20));
+    	this.tx.setEditable(false);
+    	//setRotulo(rotulo);
+    	this.tx.setText(getRotulo());
+    	this.add(tx);
+    	this.transicoes = new HashMap<Integer, HashSet<Transicao>>();
+    	this.setLayouter(new VerticalLayouter());
     	
-    	tx= new TextFigure(rotulo);
-    	tx.set(LAYOUT_INSETS,new Insets2D.Double(20,20,20,20));
-    	tx.setBounds(new Point2D.Double(10, 10), new Point2D.Double(20, 20));
-    	tx.setEditable(false);
-    	setRotulo(rotulo);
-    	tx.setText(getRotulo());
-    	add(tx);
-    	transicoes = new HashMap<Integer, HashSet<Transicao>>();
-    	setLayouter(new VerticalLayouter());
-    	
-    	grupos=new ArrayList<Integer>();
-    	grupos.add(0);
-    	
+    	this.grupos=new ArrayList<Integer>();
+    	this.grupos.add(0);
+    	idGeral++;
     	layout();
     }
     
     @Override
     public Estado clone() {
-        Estado that = (Estado) super.clone();
-      
-        int dif=0;
-        that.transicoes = new HashMap<Integer, HashSet<Transicao>>();
-        that.grupos = new ArrayList<Integer>();
-        that.grupos.add(0);
-        
-        dif=id-idGeral;
-        
-        
-        that.id=id++;
-        idGeral++;
-        
-        if (dif==1){
-        	id=idGeral;
-        	System.out.println("dif "+dif);
-        }else if (dif >1) {
-			System.out.println("dif > :"+dif);
-			idGeral+=dif-1;
-			id-=3;
-		}
-        System.out.println("id: "+id+" idgeral: "+idGeral);
-       
-        setRotulo("s"+id);
-        that.setRotulo("s"+(id -1));
-        
-        
-        that.tx.setText(getRotulo());
-       // that.setId(that.id-1);
-
-        
-        return that;
+       Estado that = new Estado();
+       setId(idGeral-1);
+       System.out.println("idGeral: "+idGeral+" id "+id);
+       return that;
     }
     
     @Override
 	public void removeNotify(Drawing drawing) {
 		// TODO Auto-generated method stub
-		System.out.println("removendo "+this.getId());
+		
 		int dif=0;
+		System.out.println(this.getId()+" "+ idGeral);
 		if(this.getId()==(idGeral)-1){
 			idGeral-=2;
 			clone();
 			//System.out.println("aki");
 		}else if (this.getId()<(idGeral -1)) {
-			System.out.println("");
-			dif= (idGeral) -(this.getId());
-			idGeral=dif+1 -idGeral;
-			clone();
-			//id--;
 			
+			dif=idGeral-this.getId();
 			
-			System.out.println(dif );
+			idGeral-=dif;
 			System.out.println(idGeral+ " " +id +" "+dif);
+			//clone();
 			
 		}
-		
-		
-		
 		super.removeNotify(drawing);
 		
 	}

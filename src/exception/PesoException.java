@@ -1,5 +1,7 @@
 package exception;
 
+import javax.swing.JOptionPane;
+
 
 /*
 This file is part of MarkovEditor.
@@ -29,5 +31,6 @@ public class PesoException extends Exception {
 
 	public PesoException(){
 		super("A soma das probabilidades de cada grupo deve ser menor ou igual a 1");
+		JOptionPane.showMessageDialog(null, "Soma de probabilidades máxima <= 1.0");
 	}
 }
